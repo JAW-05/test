@@ -20,14 +20,18 @@ def check_password():
         else:
             st.session_state["password_correct"] = False
 
+    # Initialize session state for username and password
+    if "username" not in st.session_state:
+        st.session_state["username"] = ""
+    if "password" not in st.session_state:
+        st.session_state["password"] = ""
+
     # Return True if the password is validated.
     if st.session_state.get("password_correct", False):
         return True
 
     # Show input for username and password.
-    if "username" not in st.session_state:
-        st.session_state["username"] = st.text_input("Username", key="username")
-    
+    st.session_state["username"] = st.text_input("Username", key="username")
     st.text_input(
         "Password", type="password", on_change=password_entered, key="password"
     )
@@ -51,9 +55,11 @@ if not check_password():
     st.stop()  # Do not continue if check_password is not True.
 
 # Main Streamlit app starts here
-st.write("Welcome to AI Workforce Safety System!")
+st.write("helloooooo")
+st.button("Click me")
 
 # Add logout button
 if st.button("Logout"):
     logout()
     st.experimental_rerun()  # Rerun the app to show the login screen again.
+
