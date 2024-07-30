@@ -38,12 +38,12 @@ def check_password():
 
 def logout():
     """Resets the session state to log out the user."""
-    st.session_state["password_correct"] = False
+    if "password_correct" in st.session_state:
+        st.session_state["password_correct"] = False
     if "username" in st.session_state:
         del st.session_state["username"]
     if "password" in st.session_state:
         del st.session_state["password"]  # Remove the password from session state.
-
 
 # Main app logic
 if not check_password():
@@ -56,4 +56,6 @@ st.button("Click me")
 # Add logout button
 if st.button("Logout"):
     logout()
+    # Optionally use a placeholder to trigger an update in the session state
+    st.session_state["password_correct"] = False
     st.experimental_rerun()  # Rerun the app to show the login screen again.
