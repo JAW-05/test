@@ -43,5 +43,5 @@ if not check_password():
     st.stop()
 
 # Main Streamlit app starts here
-st.write("Here goes your normal Streamlit app...")
+st.write("Hello World")
 st.button("Click me")
