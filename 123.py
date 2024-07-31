@@ -87,7 +87,7 @@ if source_radio == "IMAGE":
         st.image(visualized_image, channels = "BGR")
 
     else:
-        st.image("assets/construct.jpeg")
+        st.image("assets/construct.jpg")
         st.write("Click on 'Browse Files' in the sidebar to run inference on an image.")
 
 # Add logout button
