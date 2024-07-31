@@ -1,9 +1,5 @@
 import hmac
 import streamlit as st
-import PIL
-import cv2
-import numpy as np
-import utility  # Ensure this module is available or replace with actual function
 
 def check_password():
     """Returns `True` if the user has entered the correct password."""
