@@ -21,15 +21,15 @@ def play_video(video_source):
             break
 
 st.set_page_config(
-    page_title="Age-Gender_Emotion",
-    page_icon=":sun_with_face:",
+    page_title="AI Workforce Safety System",
+    page_icon=":construction_face:",
     layout="centered",
     initial_sidebar_state="expanded",
 )
 
-st.title("Age/Gender/Emotion Project :sun_with_face:")
+st.title("AI Workforce Safety System :sun_with_face:")
 
-st.sidebar.header("Type")
+st.sidebar.header("Type of PPE Detection")
 source_radio = st.sidebar.radio("Select Source", ["IMAGE", "VIDEO", "WEBCAM"])
 
 st.sidebar.header("Confidence")
@@ -49,7 +49,7 @@ if source_radio == "IMAGE":
         st.image(visualized_image, channels = "BGR")
 
     else:
-        st.image("assets/sample_image.jpeg")
+        st.image("assets/construct.jpg")
         st.write("Click on 'Browse Files' in the sidebar to run inference on an image.")
 
 temporary_location = None
