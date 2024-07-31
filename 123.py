@@ -1,5 +1,9 @@
-import hmac
 import streamlit as st
+import PIL
+import cv2
+import numpy as np
+import utility
+import io
 
 def check_password():
     """Returns `True` if the user has entered the correct password."""
@@ -58,6 +62,22 @@ if not check_password():
     st.stop()
 
 # Show the main content if authenticated
+
+def play_video(video_source):
+    camera = cv2.VideoCapture(video_source)
+
+    st_frame = st.empty()
+    while(camera.isOpened()):
+        ret, frame = camera.read()
+
+        if ret:
+            visualized_image = utility.predict_image(frame, conf_threshold = conf_threshold)
+            st_frame.image(visualized_image, channels = "BGR")
+
+        else:
+            camera.release()
+            break
+            
 st.set_page_config(
     page_title="AI Workforce Safety System",
     page_icon=":construction_worker:",
@@ -89,6 +109,30 @@ if source_radio == "IMAGE":
     else:
         st.image("assets/construct.jpg")
         st.write("Click on 'Browse Files' in the sidebar to run inference on an image.")
+        
+temporary_location = None
+if source_radio == "VIDEO":
+    st.sidebar.header("Upload")
+    input = st.sidebar.file_uploader("Choose a video", type = ("mp4"))
+
+    if input is not None:
+        g = io.BytesIO(input.read())
+        temporary_location = "upload.mp4"
+
+        with open(temporary_location, "wb") as out:
+            out.write(g.read())
+
+        out.close()
+
+    if temporary_location is not None:
+        play_video(temporary_location)
+
+    else:
+        st.video("assets/sample_video.mp4")
+        st.write("Click on 'Browse Files' in the sidebar to run inference on a video.")
+
+if source_radio == "WEBCAM":
+        play_video(0)
 
 # Add logout button
 if st.button("Logout"):
