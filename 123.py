@@ -57,8 +57,17 @@ if not check_password():
     st.stop()
 
 # Show the main content if authenticated
-st.write("Here goes your normal Streamlit app...")
-st.button("Click me")
+st.set_page_config(
+    page_title="AI Workforce Safety System",
+    page_icon=":sun_with_face:",
+    layout="centered",
+    initial_sidebar_state="expanded",
+)
+
+st.title("AI Workforce Safety System :construction_worker:")
+
+st.sidebar.header("Type")
+source_radio = st.sidebar.radio("Select Source", ["IMAGE", "VIDEO", "WEBCAM"])
 
 # Add logout button
 if st.button("Logout"):
