@@ -1,10 +1,5 @@
-import streamlit as st
 import hmac
-import PIL
-import cv2
-import numpy
-import aiutils
-import io
+import streamlit as st
 
 def check_password():
     """Returns `True` if the user has entered the correct password."""
@@ -49,6 +44,7 @@ def check_password():
         st.error("😕 User not known or password incorrect")
     return False
 
+
 def logout():
     """Resets the session state to log out the user."""
     st.session_state["password_correct"] = False
@@ -61,46 +57,40 @@ def logout():
 if not check_password():
     st.stop()
 
-def play_video(video_source):
-    camera = cv2.VideoCapture(video_source)
-
-    st_frame = st.empty()
-    while(camera.isOpened()):
-        ret, frame = camera.read()
-
-        if ret:
-            visualized_frame = aiutils.predict_image(frame, conf_threshold)
-            st_frame.image(visualized_frame, channels = "BGR")
-
-        else:
-            camera.release()
-            break
-
+# Show the main content if authenticated
 st.set_page_config(
-    page_title="AI Workspace Safety System",
-    page_icon="👷",
+    page_title="AI Workforce Safety System",
+    page_icon=":construction_worker:",
     layout="centered",
     initial_sidebar_state="expanded",
 )
 
-st.title("👷 AI Workspace Safety System")
+st.title("AI Workforce Safety System :construction_worker:")
 
-st.sidebar.header("Type")
-source_radio = st.sidebar.radio("Select Type", ["Detection PPE(Personal Protective Equipment)"])
-
-st.sidebar.header("Select Object to Recognition")
-source_bt = st.sidebar.button("Helmets")
-source_bt = st.sidebar.button("Glasses")
-source_bt = st.sidebar.button("Gloves")
-source_bt = st.sidebar.button("Vests")
-source_bt = st.sidebar.button("Boots")
+st.sidebar.header("Type of PPE Detection")
+source_radio = st.sidebar.radio("Select Source", ["IMAGE", "VIDEO", "WEBCAM"])
 
 st.sidebar.header("Confidence")
 conf_threshold = float(st.sidebar.slider("Select the Confidence Threshold", 10, 100, 20))/100
 
-if source_radio == "WEBCAM":
-    play_video(0)
+input = None
+if source_radio == "IMAGE":
+    st.sidebar.header("Upload")
+    input = st.sidebar.file_uploader("Choose an image", type = ("jpg", "png"))
 
+    if input is not None:
+        uploaded_image = PIL.Image.open(input)
+        uploaded_image_cv = cv2.cvtColor(np.array(uploaded_image), cv2.COLOR_RGB2BGR)
+        visualized_image = utility.predict_image(uploaded_image_cv, conf_threshold = conf_threshold)
+
+        
+        st.image(visualized_image, channels = "BGR")
+
+    else:
+        st.image("assets/construct.jpg")
+        st.write("Click on 'Browse Files' in the sidebar to run inference on an image.")
+
+# Add logout button
 if st.button("Logout"):
     logout()
     # Simply set the session state and let Streamlit's automatic rerun handle it
