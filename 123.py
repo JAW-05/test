@@ -1,5 +1,9 @@
 import hmac
 import streamlit as st
+import PIL
+import cv2
+import numpy as np
+import utility  # Ensure this module is available or replace with actual function
 
 def check_password():
     """Returns `True` if the user has entered the correct password."""
@@ -44,7 +48,6 @@ def check_password():
         st.error("😕 User not known or password incorrect")
     return False
 
-
 def logout():
     """Resets the session state to log out the user."""
     st.session_state["password_correct"] = False
@@ -60,7 +63,7 @@ if not check_password():
 # Show the main content if authenticated
 st.set_page_config(
     page_title="AI Workforce Safety System",
-    page_icon=":sun_with_face:",
+    page_icon=":construction_worker:",
     layout="centered",
     initial_sidebar_state="expanded",
 )
@@ -76,16 +79,16 @@ conf_threshold = float(st.sidebar.slider("Select the Confidence Threshold", 10, 
 input = None
 if source_radio == "IMAGE":
     st.sidebar.header("Upload")
-    input = st.sidebar.file_uploader("Choose an image", type = ("jpg", "png"))
+    input = st.sidebar.file_uploader("Choose an image", type=("jpg", "png"))
 
     if input is not None:
-        uploaded_image = PIL.Image.open(input)
-        uploaded_image_cv = cv2.cvtColor(np.array(uploaded_image), cv2.COLOR_RGB2BGR)
-        visualized_image = utility.predict_image(uploaded_image_cv, conf_threshold = conf_threshold)
-
-        
-        st.image(visualized_image, channels = "BGR")
-
+        try:
+            uploaded_image = PIL.Image.open(input)
+            uploaded_image_cv = cv2.cvtColor(np.array(uploaded_image), cv2.COLOR_RGB2BGR)
+            visualized_image = utility.predict_image(uploaded_image_cv, conf_threshold=conf_threshold)
+            st.image(visualized_image, channels="BGR")
+        except Exception as e:
+            st.error(f"Error processing image: {e}")
     else:
         st.image("assets/construct.jpg")
         st.write("Click on 'Browse Files' in the sidebar to run inference on an image.")
