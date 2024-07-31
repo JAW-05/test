@@ -1,9 +1,5 @@
 import hmac
 import streamlit as st
-import PIL
-import cv2
-import numpy as np
-import utility  # Ensure this module is available or replace with actual function
 
 def check_password():
     """Returns `True` if the user has entered the correct password."""
@@ -48,6 +44,7 @@ def check_password():
         st.error("😕 User not known or password incorrect")
     return False
 
+
 def logout():
     """Resets the session state to log out the user."""
     st.session_state["password_correct"] = False
@@ -79,16 +76,16 @@ conf_threshold = float(st.sidebar.slider("Select the Confidence Threshold", 10, 
 input = None
 if source_radio == "IMAGE":
     st.sidebar.header("Upload")
-    input = st.sidebar.file_uploader("Choose an image", type=("jpg", "png"))
+    input = st.sidebar.file_uploader("Choose an image", type = ("jpg", "png"))
 
     if input is not None:
-        try:
-            uploaded_image = PIL.Image.open(input)
-            uploaded_image_cv = cv2.cvtColor(np.array(uploaded_image), cv2.COLOR_RGB2BGR)
-            visualized_image = utility.predict_image(uploaded_image_cv, conf_threshold=conf_threshold)
-            st.image(visualized_image, channels="BGR")
-        except Exception as e:
-            st.error(f"Error processing image: {e}")
+        uploaded_image = PIL.Image.open(input)
+        uploaded_image_cv = cv2.cvtColor(np.array(uploaded_image), cv2.COLOR_RGB2BGR)
+        visualized_image = utility.predict_image(uploaded_image_cv, conf_threshold = conf_threshold)
+
+        
+        st.image(visualized_image, channels = "BGR")
+
     else:
         st.image("assets/construct.jpg")
         st.write("Click on 'Browse Files' in the sidebar to run inference on an image.")
