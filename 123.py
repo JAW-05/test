@@ -67,8 +67,28 @@ st.set_page_config(
 
 st.title("AI Workforce Safety System :construction_worker:")
 
-st.sidebar.header("Type")
+st.sidebar.header("Type of PPE Detection")
 source_radio = st.sidebar.radio("Select Source", ["IMAGE", "VIDEO", "WEBCAM"])
+
+st.sidebar.header("Confidence")
+conf_threshold = float(st.sidebar.slider("Select the Confidence Threshold", 10, 100, 20))/100
+
+input = None
+if source_radio == "IMAGE":
+    st.sidebar.header("Upload")
+    input = st.sidebar.file_uploader("Choose an image", type = ("jpg", "png"))
+
+    if input is not None:
+        uploaded_image = PIL.Image.open(input)
+        uploaded_image_cv = cv2.cvtColor(np.array(uploaded_image), cv2.COLOR_RGB2BGR)
+        visualized_image = utility.predict_image(uploaded_image_cv, conf_threshold = conf_threshold)
+
+        
+        st.image(visualized_image, channels = "BGR")
+
+    else:
+        st.image("assets/construct.jpeg")
+        st.write("Click on 'Browse Files' in the sidebar to run inference on an image.")
 
 # Add logout button
 if st.button("Logout"):
